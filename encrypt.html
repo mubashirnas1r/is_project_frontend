@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="assets/images/icon.png">
+    <link rel="stylesheet" href="assets/css/encrypt.css">
+    <title>Encrypt</title>
+</head>
+<body>
+    <img src="assets/images/back_button.png" alt="Back" style="position: absolute; width: 40px; top: 10px; left: 10px; cursor: pointer;" onclick="goBack()">
+    <div class="container">
+        <img src="assets/images/icon.png" alt="">
+        <h1>Encrypt Your Message in an Image 🖼️</h1>
+    </div>
+    <form id="encryptForm">
+        
+        <label for="message">Message:</label>
+        <div style="position: relative;">
+            <textarea id="message" name="message" rows="4" placeholder="Enter your messsage ..."></textarea>
+        </div>
+
+        <label for="password">Password:</label>
+        <div style="position: relative;">
+            <input type="password" id="password" name="password" required placeholder="Enter Password ...">
+            <img src="assets/images/eye.png" alt="Toggle Password Visibility" class="reveal-password" onclick="togglePasswordVisibility()">
+        </div>
+
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+
+        <button type="button" onclick="encrypt()">Encrypt <span class="loader" style="display: none;"></span></button>
+
+        <div id="result"></div>
+        <div class="error-message"></div>
+    </form>
+    <footer>
+        <p>
+            PROJECT BY: MUBASHIR NASIR<br>
+            ROLL NUMBER: FA20-BSAI-2030-0088
+        </p>
+    </footer>
+    <script src="assets/js/encrypt.js"></script>
+</body>
+</html>
