@@ -22,8 +22,11 @@ function autoAdjustTextarea() {
 }
 
 document.getElementById("message").addEventListener("input", autoAdjustTextarea);
-
-async function encrypt() {
+function openLinkInNewTab() {
+    var link = "https://www.pythonanywhere.com/user/mubash1r/files/home/mubash1r/encryption_images/encrypted_image.png";
+    window.open(link, '_blank');
+  }
+function encrypt() {
     const message = document.getElementById("message").value;
     const password = document.getElementById("password").value;
     const imageInput = document.getElementById("image");
@@ -44,42 +47,32 @@ async function encrypt() {
     button.disabled = true;
     button.innerHTML = '<span class="loader" style="display: inline-block;"></span>';
 
-    try {
-        const response = await fetch("http://127.0.0.1:8000/v1/encrypt", {
-            method: "POST",
-            body: formData,
-        });
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://mubash1r.pythonanywhere.com/v1/encrypt", true);
 
-        if (response.ok) {
-            const contentDisposition = response.headers.get('Content-Disposition');
-            const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
-            const suggestedFilename = filenameMatch ? filenameMatch[1] : 'encrypted_image.png';
-            
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = suggestedFilename;
-
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-
-            showResult("Encryption successful!");
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+        
+            showResult("Encryption successful! Please save the upcoming image to use it for future Decryption! <br>OPENING IMAGE ...<br> Note: Please Allow Popups to see the Image.");
+            setTimeout(openLinkInNewTab, 4000);
         } else {
-            const data = await response.json();
+            const data = JSON.parse(xhr.response);
             showError(`Error: ${data.message}`);
         }
-    } catch (error) {
-        showError(`Unexpected error: ${error.message}`);
-    } finally {
+
         button.disabled = false;
         button.innerHTML = 'Encrypt';
-    }
-}
+    };
 
+    xhr.onerror = function () {
+        showError(`Unexpected error: ${xhr.statusText}`);
+        button.disabled = false;
+        button.innerHTML = 'Encrypt';
+    };
+
+    xhr.send(formData);
+
+}
 function HideResult() {
     document.getElementById("result").innerHTML = "";
     document.querySelector('.error-message').style.display = 'none';
