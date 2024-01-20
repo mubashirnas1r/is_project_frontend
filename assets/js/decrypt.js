@@ -13,7 +13,7 @@ function togglePasswordVisibility() {
         
     }
 }
-async function decrypt() {
+function decrypt() {
     const password = document.getElementById("password").value;
     const image = document.getElementById("image").files[0];
 
@@ -21,7 +21,6 @@ async function decrypt() {
         showError("All fields are required.");
         return;
     }
-    
 
     const formData = new FormData();
     formData.append("password", password);
@@ -31,25 +30,27 @@ async function decrypt() {
     button.disabled = true;
     button.innerHTML = '<span class="loader" style="display: inline-block;"></span>';
 
-    try {
-        const response = await fetch("http://127.0.0.1:8000/v1/decrypt", {
-            method: "POST",
-            body: formData,
-        });
-
+    fetch("http://127.0.0.1:5000/v1/decrypt", {
+        method: "POST",
+        body: formData,
+    })
+    .then(response => {
         if (response.ok) {
-            const data = await response.json();
-            showResult(`Decrypted Message: '${data.message}'`);
+            return response.json();
         } else {
-            const data = await response.json();
-            showError(`Error: ${data.message}`);
+            return response.json().then(data => Promise.reject(data));
         }
-    } catch (error) {
-        showError(`Unexpected error: ${error.message}`);
-    } finally {
+    })
+    .then(data => {
+        showResult(`Decrypted Message: '${data.message}'`);
+    })
+    .catch(error => {
+        showError(`Error: ${error.message}`);
+    })
+    .finally(() => {
         button.disabled = false;
         button.innerHTML = 'Decrypt';
-    }
+    });
 }
 function HideResult() {
     document.getElementById("result").innerHTML = "";
