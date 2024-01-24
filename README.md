@@ -5,8 +5,6 @@
    git clone https://github.com/mubashirnas1r/is_project_frontend.git
    ```
 
-   Replace `[repository_url]` with the actual URL of the Git repository you want to clone.
-
 2. **Navigate to the Project Directory:**
    Change your working directory to the newly cloned project folder:
 
